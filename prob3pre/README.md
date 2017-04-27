@@ -14,5 +14,5 @@
 
 ## 提出
 
-- [solution3.txt](./solution.txt)
+- [solution3.txt](./solution3.txt)
 - [kadai3pre.c](./kadai3pre.c)
