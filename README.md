@@ -6,7 +6,7 @@ Algorithm and data structure
 
 ## Contents
 
-- [第1回練習問題]()
+- [第1回練習問題](./prob1)
 - [第２回講義資料の理解度確認](./prob2pre)
 - [第２回講義中課題]()
 - [第３回講義資料の理解度確認](./prob3pre)
