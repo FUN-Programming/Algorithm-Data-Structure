@@ -1,4 +1,6 @@
 #include <stdio.h>
+#include <string.h>
+#include <limits.h>
 
 #define MAX 10
 
@@ -65,16 +67,55 @@ void Print(const PhysCheckStack *s) {
     }
 }
 
+char *bm_match(char *pat, char *txt) {
+    char *pt;
+    char *pp;
+    int txt_len = (int) strlen(txt);
+    int pat_len = (int) strlen(pat);
+    int skip[UCHAR_MAX + 1];
+    int i;
+
+    for (i = 0; i <= UCHAR_MAX; i++)
+        skip[i] = pat_len;
+    for (pp = pat; *pp != '\0'; pp++)
+        skip[*pp] = (int) (strlen(pp) - 1);
+    skip[*(pp - 1)] = pat_len;
+
+    pt = txt + pat_len - 1;
+    while (pt < txt + txt_len) {
+        pp = pat + pat_len - 1;
+        while (*pt == *pp) {
+            if (pp == pat) return pt;
+            pp--;
+            pt--;
+        }
+        pt += (skip[*pt] > strlen(pp)) ? (size_t) skip[*pt] : strlen(pp);
+    }
+    return NULL;
+}
+
+int Count(PhysCheckStack *s, PhysCheck *x) {
+    int i, counter = 0;
+
+    for (i = 0; i < s->ptr; i++) {
+        if (bm_match(x->name, s->stk[i].name) != NULL) {
+            counter++;
+        }
+    }
+
+    return counter;
+}
+
 int main() {
     PhysCheckStack s;
 
     Initialize(&s, MAX);
 
     while (1) {
-        int menu;
+        int menu, counter;
         PhysCheck x;
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
-        printf("(1) プッシュ (2) ポップ (3) ピーク (4) 表示 (0) 終了：");
+        printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (5)計数 (0)終了：");
         scanf("%d", &menu);
         //-----------------①
 
@@ -111,6 +152,14 @@ int main() {
                 break;
             case 4:
                 Print(&s);
+                break;
+            case 5:
+                printf("パターン：");
+                scanf("%s", x.name);
+                if ((counter = Count(&s, &x)) == 0)
+                    puts("パターンは存在しません.");
+                else
+                    printf("パターンの個数は %d 個です。\n", counter);
                 break;
             default:
                 break;
