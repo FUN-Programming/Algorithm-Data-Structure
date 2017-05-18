@@ -13,3 +13,5 @@ Algorithm and data structure
 - [第３回講義中課題](./prob3post)
 - [第４回講義資料の理解度確認](./prob4pre)
 - [第４回講義中課題](./prob4post)
+- [第5回講義中課題](./prob5)
+- [練習問題5](./prob5homework)
