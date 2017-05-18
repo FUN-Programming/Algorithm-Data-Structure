@@ -56,7 +56,7 @@ int main() {
     Initialize(&s, MAX);
 
     while (1) {
-        int menu, x = 0;
+        int menu, x;
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
         printf("(1) プッシュ (2) ポップ (3) ピーク (4) 表示 (0) 終了：");
         scanf("%d", &menu);
@@ -72,7 +72,7 @@ int main() {
                     puts("\aエラー：プッシュに失敗しました。");
                 break;
             case 2:
-                if (Pop(&s, x) == -1)
+                if (Pop(&s, &x) == -1)
                     puts("\aエラー：プッシュに失敗しました。");
                 else
                     printf("ポップしたデータは%dです。\n", x);
