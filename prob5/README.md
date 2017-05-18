@@ -33,3 +33,32 @@ typedef struct {
     char name[20];
 } PhysCheck;
 ```
+
+## 提出
+
+```
+1)
+(ア) Peek 
+(イ) -1
+(ウ) 0
+
+2)
+(ア) s.ptr：5, s.stk[4]：24
+(イ) 24
+(ウ) 47
+
+3)
+int Push(PhysCheckStack *s, PhysCheck x) {
+    if (s->ptr >= s->max) return -1;
+    s->stk[s->ptr] = x;
+    s->ptr++;
+    return 0;
+}
+
+int Pop(PhysCheckStack *s, PhysCheck *x) {
+    if (s->ptr <= 0) return -1;
+    s->ptr--;
+    *x = s->stk[s->ptr];
+    return 0;
+}
+```
