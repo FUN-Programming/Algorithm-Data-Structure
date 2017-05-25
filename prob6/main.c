@@ -12,7 +12,7 @@ typedef struct {
 
 int Initialize(StringsStack *s, int max) {
     s->ptr = 0;
-    if ((s->stk = calloc(max, sizeof(char *))) == NULL) {
+    if ((s->stk = calloc((size_t) max, sizeof(char *))) == NULL) {
         s->max = 0;
         return -1;
     }
@@ -67,6 +67,17 @@ void Print(const StringsStack *s) {
         printf("%s\n", s->stk[i]);
 }
 
+int Search(StringsStack *s, char *x) {
+    int i;
+
+    for (i = s->ptr - 1; i > 0; i--) {
+        if (strstr(s->stk[i], x) != NULL)
+            return i;
+    }
+
+    return -1;
+}
+
 int main(void) {
     StringsStack s;
     int max;
@@ -80,7 +91,7 @@ int main(void) {
     }
 
     while (1) {
-        int menu;
+        int menu, n;
         char x[String_Max];
 
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
@@ -111,6 +122,16 @@ int main(void) {
                 break;
             case 4:
                 Print(&s);
+                break;
+            case 5:
+                printf("検索する文字列：");
+                scanf("%s", x);
+                if ((n = Search(&s, x)) == -1)
+                    puts("\aエラー：文字列が見つかりませんでした。\n");
+                else
+                    printf("文字列は%d番目に見つかりました。\n", n + 1);
+                break;
+            default:
                 break;
         }
     }
