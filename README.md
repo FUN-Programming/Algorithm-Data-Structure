@@ -1,4 +1,5 @@
 # Algorithm-Data-Structure
+
 Algorithm and data structure
 
 - 提出期限が過ぎた段階でプログラムを公開する
@@ -15,3 +16,4 @@ Algorithm and data structure
 - [第4回講義中課題](./prob4post)
 - [第5回講義中課題](./prob5)
 - [練習問題5](./prob5homework)
+- [第6回講義中課題](./prob6)
