@@ -43,13 +43,20 @@ void Terminate(PhysCheckStack *s) {
     s->max = s->ptr = 0;
 }
 
+static PhysCheck *CallocPhysCheck(void) {
+    return calloc(1, sizeof(PhysCheck));
+}
+
+static char *CallocName(void) {
+    return calloc(String_Max, sizeof(char));
+}
+
 int Push(PhysCheckStack *s, PhysCheck *x) {
     if (s->ptr >= s->max) return -1;
-    PhysCheck *tmp = calloc(1, sizeof(PhysCheck *));
-    tmp->name = calloc(String_Max, sizeof(char *));
-    strcpy(x->name, tmp->name);
-    tmp->body = x->body;
-    s->stk[s->ptr] = tmp;
+    s->stk[s->ptr] = CallocPhysCheck();
+    s->stk[s->ptr]->name = CallocName();
+    strcpy(s->stk[s->ptr]->name, x->name);
+    s->stk[s->ptr]->body = x->body;
     s->ptr++;
     return 0;
 }
@@ -57,15 +64,16 @@ int Push(PhysCheckStack *s, PhysCheck *x) {
 int Pop(PhysCheckStack *s, PhysCheck *x) {
     if (s->ptr <= 0) return -1;
     s->ptr--;
-    strcpy(x, s->stk[s->ptr]);
+    strcpy(x->name, s->stk[s->ptr]->name);
+    x->body = s->stk[s->ptr]->body;
     free(s->stk[s->ptr]);
     return 0;
 }
 
 int Peek(PhysCheckStack *s, PhysCheck *x) {
     if (s->ptr <= 0) return -1;
-    *x = *s->stk[s->ptr - 1];
-//    strcpy(x, s->stk[s->ptr - 1]);
+    strcpy(x->name, s->stk[s->ptr - 1]->name);
+    x->body = s->stk[s->ptr - 1]->body;
     return 0;
 }
 
@@ -145,7 +153,7 @@ int main() {
     while (1) {
         int menu, counter;
         PhysCheck x;
-        char name[String_Max];
+        x.name = CallocName();
 
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
         printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (5)計数 (6)探索 (0)終了：");
@@ -156,13 +164,11 @@ int main() {
         switch (menu) {
             case 1:
                 printf("名前：");
-                scanf("%s", name);
+                scanf("%s", x.name);
                 printf("視力：");
                 scanf("%lf", &x.body.vision);
                 printf("身長：");
                 scanf("%d", &x.body.height);
-                strcpy(name, x.name);
-                PrintOne(&x); puts("");
                 if (Push(&s, &x) == -1)
                     puts("\aエラー：プッシュに失敗しました。");
                 break;
@@ -198,9 +204,19 @@ int main() {
             case 6:
                 printf("パターン：");
                 scanf("%s", x.name);
+                if ((counter = Search(&s, &x)) == -1)
+                    puts("パターンは存在しません.");
+                else {
+                    printf("見つけたデータは ");
+                    PrintOne(s.stk[counter]);
+                    printf(" です。\n");
+                }
+                break;
             default:
                 break;
         }
+
+        free(x.name);
     }
 
     Terminate(&s);
