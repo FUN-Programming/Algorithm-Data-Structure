@@ -15,5 +15,6 @@ Algorithm and data structure
 - [第4回講義資料の理解度確認](./prob4pre)
 - [第4回講義中課題](./prob4post)
 - [第5回講義中課題](./prob5)
-- [練習問題5](./prob5homework)
+- [練習問題5(宿題)](./prob5homework)
 - [第6回講義中課題](./prob6)
+- [練習問題6(宿題)](./prob6homework)
