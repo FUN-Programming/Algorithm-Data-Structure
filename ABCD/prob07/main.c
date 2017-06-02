@@ -6,73 +6,101 @@ typedef struct {
     int num;
     int front;
     int rear;
-    int *que;
-} IntQueue;
+    char **que;
+} StringsQueue;
 
-int Initialize(IntQueue *q, int max) {
+int Initialize(StringsQueue *q, int max) {
     q->num = q->front = q->rear = 0;
-    if ((q->que = calloc(max, sizeof(int))) == NULL) {
+    if ((q->que = calloc(max, sizeof(char *))) == NULL) {
         q->max = 0;
         return -1;
     }
-    q->max = 0;
-    return -1;
+    q->max = max;
+    return 0;
 }
 
-void Terminate(IntQueue *q) {
+void Terminate(StringsQueue *q) {
+    int i;
     if (q->que != NULL) {
+        for (i = 0; i < q->num; i++)
+            free(q->que[(i + q->front) % q->max]);
         free(q->que);
         q->max = q->num = q->front = q->rear = 0;
     }
 }
 
-int Enque(IntQueue *q, int x) {
+int Enque(StringsQueue *q, char *x) {
+    int i;
+    
     if (q->num >= q->max)
         return -1;
     else {
         q->num++;
-        q->que[q->rear++] = x;
+        q->que[q->rear] = calloc(81, sizeof(char));
+
+        for (i = 0; x[i] != '\0'; i++)
+            q->que[q->rear][i] = x[i];
+        
+        q->rear++;
+        
         if (q->rear == q->max) q->rear = 0;
+        
         return 0;
     }
 }
 
-int Deque(IntQueue *q, int *x) {
+int Deque(StringsQueue *q, char *x) {
+    int i;
+    
     if (q->num <= 0)
         return -1;
     else {
         q->num--;
-        *x = q->que[q->front++];
+        
+        for (i = 0; q->que[q->front][i] != '\0'; i++)
+            x[i] = q->que[q->front][i];
+
+        q->que[q->front][i + 1] = '\0';
+        free(q->que[q->front]);
+        q->front++;
+        
         if (q->front == q->max) q->front = 0;
+        
         return 0;
     }
 }
 
-int Peek(const IntQueue *q, int *x) {
+int Peek(const StringsQueue *q, char *x) {
+    int i;
+
     if (q->num <= 0)
         return -1;
-    *x = q->que[q->front];
+
+    for (i = 0; q->que[q->front][i] != '\0'; i++)
+        x[i] = q->que[q->front][i];
+    q->que[q->front][i + 1] = '\0';
+
     return 0;
 }
 
-int Capacity(const IntQueue *q) {
+int Capacity(const StringsQueue *q) {
     return q->max;
 }
 
-int Size(const IntQueue *q) {
+int Size(const StringsQueue *q) {
     return q->num;
 }
 
-void Print(const IntQueue *q) {
+void Print(const StringsQueue *q) {
     int i;
 
     for (i = 0; i < q->num; i++)
-        printf("%d ", q->que[(i + q->front) % q->max]);
+        printf("%s ", q->que[(i + q->front) % q->max]);
     putchar('\n');
 }
 
 int main(void) {
-    IntQueue que;
+    StringsQueue que;
 
     if (Initialize(&que, 10) == -1) {
         puts("キューの生成に失敗しました。");
@@ -80,7 +108,8 @@ int main(void) {
     }
 
     while (1) {
-        int m, x;
+        int m;
+        char *x = calloc(81, sizeof(char));
 
         printf("現在のデータ数；%d/%d\n", Size(&que), Capacity(&que));
         printf("(1)エンキュー (2)デキュー (3)ピーク (4)表示 (0)終了：");
@@ -92,26 +121,30 @@ int main(void) {
         switch (m) {
             case 1:
                 printf("データ：");
-                scanf("%d", &x);
+                scanf("%s", x);
                 if (Enque(&que, x) == -1)
                     puts("\aエラー；データのエンキューに失敗しました。");
                 break;
             case 2:
-                if (Deque(&que, &x) == -1)
+                if (Deque(&que, x) == -1)
                     puts("\aエラー；デキューに失敗しました。");
                 else
-                    printf("デキューしたデータは%dです。\n", x);
+                    printf("デキューしたデータは%sです。\n", x);
                 break;
             case 3:
-                if (Peek(&que, &x) == -1)
+                if (Peek(&que, x) == -1)
                     puts("\aエラー；ピークに失敗しました。");
                 else
-                    printf("ピークしたデータは%dです。\n", x);
+                    printf("ピークしたデータは%sです。\n", x);
                 break;
             case 4:
                 Print(&que);
                 break;
+            default:
+                break;
         }
+
+        free(x);
     }
     Terminate(&que);
     return 0;
