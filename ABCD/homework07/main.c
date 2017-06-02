@@ -121,7 +121,6 @@ void Print(const StringsQueue *q) {
     for (i = 0; i < q->num; i++)
         printf("%s ", q->que[(i + q->front) % q->max]);
     putchar('\n');
-    printf("max:%d front:%d rear:%d num:%d\n", q->max, q->front, q->rear, q->num);
 }
 
 char *bm_match(char *pat, char *txt) {
@@ -170,7 +169,7 @@ int Count(StringsQueue *q, char *x) {
 int main(void) {
     StringsQueue que;
 
-    if (Initialize(&que, 3) == -1) {
+    if (Initialize(&que, 10) == -1) {
         puts("キューの生成に失敗しました。");
         return 1;
     }
@@ -192,7 +191,6 @@ int main(void) {
                 scanf("%s", x);
                 if (Enque(&que, x) == -1)
                     puts("\aエラー；データのエンキューに失敗しました。");
-                printf("rear:%d\n", que.rear);
                 break;
             case 2:
                 if (Deque(&que, x) == -1)
