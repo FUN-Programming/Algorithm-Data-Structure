@@ -15,8 +15,8 @@ int Initialize(IntQueue *q, int max) {
         q->max = 0;
         return -1;
     }
-    q->max = 0;
-    return -1;
+    q->max = max;
+    return 0;
 }
 
 void Terminate(IntQueue *q) {
