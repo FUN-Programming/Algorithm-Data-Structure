@@ -21,7 +21,7 @@ Algorithm and data structure
 - [第6回講義中課題](./EF/prob6)
 - [練習問題6(宿題)](./EF/prob6homework)
 
-### ABCD?
+### GHI
 
-- [prob07](./ABCD/prob07)
-- [homework07](./ABCD/homework07)
+- [prob07](./GHI/prob07)
+- [homework07](./GHI/homework07)
