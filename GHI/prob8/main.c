@@ -192,7 +192,7 @@ Menu SelectMenu(void) {
 
     do {
         for (i = TERMINATE; i < CLEAR; i++) {
-            printf("(%2d) %-18.18s  ", i + 1, mstring[i]);
+            printf("(%2d) %-21s   \t", i + 1, mstring[i]);
             if ((i % 3) == 2)
                 putchar('\n');
         }
@@ -215,10 +215,14 @@ int main(void) {
             case INS_FRONT:
                 x = ScanMember("先頭に挿入", MEMBER_NO | MEMBER_NAME);
                 InsertFront(&list, &x);
+                printf("head: %d, %s\n", list.head->data.no, list.head->data.name);
+                printf("crnt: %d, %s\n", list.crnt->data.no, list.crnt->data.name);
                 break;
             case INS_REAR:
                 x = ScanMember("末尾に挿入", MEMBER_NO | MEMBER_NAME);
                 InsertRear(&list, &x);
+                printf("head: %d, %s\n", list.head->data.no, list.head->data.name);
+                printf("crnt: %d, %s\n", list.crnt->data.no, list.crnt->data.name);
                 break;
             case RMV_FRONT:
                 RemoveFront(&list);
