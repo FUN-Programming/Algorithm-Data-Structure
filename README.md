@@ -20,6 +20,7 @@ Algorithm and data structure
 - [練習問題5(宿題)](./EF/prob5homework)
 - [第6回講義中課題](./EF/prob6)
 - [練習問題6(宿題)](./EF/prob6homework)
+- [第7回講義中課題](./EF/prob7)
 
 ### GHI
 
