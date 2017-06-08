@@ -70,7 +70,7 @@ void Print(const StringsStack *s) {
 int Search(StringsStack *s, char *x) {
     int i;
 
-    for (i = s->ptr - 1; i > 0; i--) {
+    for (i = s->ptr - 1; i >= 0; i--) {
         if (strstr(s->stk[i], x) != NULL)
             return i;
     }
