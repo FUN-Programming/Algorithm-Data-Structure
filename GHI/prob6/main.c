@@ -12,7 +12,7 @@ typedef struct {
 
 int Initialize(StringsStack *s, int max) {
     s->ptr = 0;
-    if ((s->stk = calloc((size_t) max, sizeof(char *))) == NULL) {
+    if ((s->stk = calloc(max, sizeof(char *))) == NULL) {
         s->max = 0;
         return -1;
     }
@@ -24,7 +24,7 @@ void Terminate(StringsStack *s) {
     if (s->stk != NULL) {
         while (--s->ptr >= 0)
             free(s->stk[s->ptr]);
-        free(s->stk);
+        free(s->stk[s->ptr]);
     }
     s->max = s->ptr = 0;
 }
@@ -80,24 +80,24 @@ int Search(StringsStack *s, char *x) {
 
 int main(void) {
     StringsStack s;
-    int max;
+    int max, search;
 
-    printf("スタックの大きさを入力してください");
+    printf("スタックの大きさを入力してください：");
     scanf("%d", &max);
 
     if (Initialize(&s, max) == -1) {
-        puts("スタックの生成に失敗しました。\n");
+        puts("スタックの生成に失敗しました.\n");
         return 1;
     }
 
     while (1) {
-        int menu, n;
+        int menu;
         char x[String_Max];
 
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
-        printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (0)終了：");
+        printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (5)探索 (0)終了：");
         scanf("%d", &menu);
-        // ---------------- ①
+        // ----------------①
 
         if (menu == 0) break;
 
@@ -106,17 +106,17 @@ int main(void) {
                 printf("プッシュする文字列：");
                 scanf("%s", x);
                 if (Push(&s, x) == -1)
-                    puts("\aエラー：プッシュに失敗しました。\n");
+                    puts("\aエラー：プッシュに失敗しました.\n");
                 break;
             case 2:
                 if (Pop(&s, x) == -1)
-                    puts("\aエラー：ポップに失敗しました。\n");
+                    puts("\aエラー：ポップに失敗しました.\n");
                 else
                     printf("ポップした文字列は%s, ", x);
                 break;
             case 3:
                 if (Peek(&s, x) == -1)
-                    puts("\aエラー：ピークに失敗しました。\n");
+                    puts("\aエラー：ピークに失敗しました.\n");
                 else
                     printf("ピーク下文字列は%s, ", x);
                 break;
@@ -124,14 +124,13 @@ int main(void) {
                 Print(&s);
                 break;
             case 5:
-                printf("検索する文字列：");
+                printf("パターン：");
                 scanf("%s", x);
-                if ((n = Search(&s, x)) == -1)
-                    puts("\aエラー：文字列が見つかりませんでした。\n");
+                if ((search = Search(&s, x)) == -1)
+                    puts("パターンは見つかりません");
                 else
-                    printf("文字列は%d番目に見つかりました。\n", n + 1);
-                break;
-            default:
+                    printf("パターンは%d番目に見つかりました\n", search);
+                printf("search = %d\n", search);
                 break;
         }
     }
