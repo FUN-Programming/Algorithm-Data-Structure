@@ -1,4 +1,4 @@
-# prob8
+# 授業中練習問題8
 
 ソースコード：[source.c](./source.c)
 
