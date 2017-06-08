@@ -22,6 +22,8 @@
 (イ) 1回
 (ウ) que.max: 6, que.front: 0, que.rear: 5, que.que[0]: 47
 
+2)
+
 typedef struct {
     int max;
     int num;
