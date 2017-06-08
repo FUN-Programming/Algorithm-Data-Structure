@@ -32,7 +32,7 @@ switch文から呼び出される関数名：ScanMemberとInsertFront
 2)
 (ア) 1016999
 (イ) n
-(ウ) r
+(ウ) r
 
 3)
 (ア) [2, konno] [5, ueda] [1, taka] [2, mima] [7, niimi] [2, saito] [6, ueda]
