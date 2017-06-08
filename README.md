@@ -27,3 +27,4 @@ Algorithm and data structure
 
 - [prob07](./GHI/prob07)
 - [homework07](./GHI/homework07)
+- [prob8](./GHI/prob8)
