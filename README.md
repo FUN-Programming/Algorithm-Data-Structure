@@ -32,3 +32,4 @@ Algorithm and data structure
 - [授業中練習問題7](./GHI/prob07)
 - [練習問題7(宿題)](./GHI/homework07)
 - [授業中練習問題8](./GHI/prob8)
+- [練習問題8(宿題)](./GHI/prob8homework)
