@@ -12,7 +12,7 @@ typedef struct {
 
 int Initialize(StringsStack *s, int max) {
     s->ptr = 0;
-    if ((s->stk == calloc(max, sizeof(char *))) == NULL) {
+    if ((s->stk = calloc(max, sizeof(char *))) == NULL) {
         s->max = 0;
         return -1;
     }
@@ -67,11 +67,22 @@ void Print(const StringsStack *s) {
         printf("%s\n", s->stk[i]);
 }
 
+int Search(StringsStack *s, char *x) {
+    int i;
+
+    for (i = s->ptr - 1; i >= 0; i--) {
+        if (strstr(s->stk[i], x) != NULL)
+            return i;
+    }
+
+    return -1;
+}
+
 int main(void) {
     StringsStack s;
-    int max;
+    int max, search;
 
-    printf("スタックの大きさを入力してください");
+    printf("スタックの大きさを入力してください：");
     scanf("%d", &max);
 
     if (Initialize(&s, max) == -1) {
@@ -84,7 +95,7 @@ int main(void) {
         char x[String_Max];
 
         printf("現在のデータ数：%d/%d\n", Size(&s), Capacity(&s));
-        printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (0)終了：");
+        printf("(1)プッシュ (2)ポップ (3)ピーク (4)表示 (5)探索 (0)終了：");
         scanf("%d", &menu);
         // ----------------①
 
@@ -112,8 +123,17 @@ int main(void) {
             case 4:
                 Print(&s);
                 break;
+            case 5:
+                printf("パターン：");
+                scanf("%s", x);
+                if ((search = Search(&s, x)) == -1)
+                    puts("パターンは見つかりません");
+                else
+                    printf("パターンは%d番目に見つかりました\n", search);
+                printf("search = %d\n", search);
+                break;
         }
-        Terminate(&s);
-        return 0;
     }
+    Terminate(&s);
+    return 0;
 }
