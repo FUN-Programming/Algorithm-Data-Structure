@@ -2,16 +2,22 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define MEMBER_NO 1
-#define MEMBER_NAME 2
+#define PHYSCHECK_VISION 1
+#define PHYSCHECK_HEIGHT 2
+#define PHYSCHECK_NAME 4
 
 typedef struct {
-    int no;
-    char name[20];
-} Member;
+    double vision;
+    int height;
+} Body;
+
+typedef struct {
+    char *name;
+    Body body;
+} PhysCheck;
 
 typedef struct __node {
-    Member data;
+    PhysCheck data;
     struct __node *prev;
     struct __node *next;
 } Dnode;
@@ -21,45 +27,55 @@ typedef struct {
     Dnode *crnt;
 } Dlist;
 
-int MemberNoCmp(const Member *x, const Member *y) {
-    return x->no < y->no ? -1 : x->no > y->no ? 1 : 0;
+int PhysCheckHeightCmp(const PhysCheck *x, const PhysCheck *y) {
+    return x->body.height < y->body.height ? -1 : x->body.height > y->body.height ? 1 : 0;
 }
 
-int MemberNameCmp(const Member *x, const Member *y) {
+int PhysCheckVisionCmp(const PhysCheck *x, const PhysCheck *y) {
+    return x->body.vision < y->body.vision ? -1 : x->body.vision > y->body.vision ? 1 : 0;
+}
+
+int PhysCheckNameCmp(const PhysCheck *x, const PhysCheck *y) {
     return strcmp(x->name, y->name);
 }
 
-void PrintMember(const Member *x) {
-    printf("%d %s", x->no, x->name);
+void PrintPhysCheck(const PhysCheck *x) {
+    printf("%0.2lf %d %s", x->body.vision, x->body.height, x->name);
 }
 
-void PrintLnMember(const Member *x) {
-    printf("%d %s\n", x->no, x->name);
+void PrintLnPhysCheck(const PhysCheck *x) {
+    printf("%0.2lf %d %s\n", x->body.vision, x->body.height, x->name);
 }
 
-Member ScanMember(const char *message, int sw) {
-    Member temp;
+PhysCheck ScanPhysCheck(const char *message, int sw) {
+    PhysCheck temp;
 
-    printf("%sするデータを入力してください。\n", message);
+    printf("Please input data to %s\n", message);
 
-    if (sw & MEMBER_NO) {
-        printf("番号：");
-        scanf("%d", &temp.no);
+    if (sw & PHYSCHECK_VISION) {
+        printf("vision: ");
+        scanf("%lf", &temp.body.vision);
     }
 
-    if (sw & MEMBER_NAME) {
-        printf("氏名：");
+    if (sw & PHYSCHECK_HEIGHT) {
+        printf("height: ");
+        scanf("%d", &temp.body.height);
+    }
+
+    if (sw & PHYSCHECK_NAME) {
+        temp.name = calloc(82, sizeof(char));
+        printf("name: ");
         scanf("%s", temp.name);
     }
 
     return temp;
 }
 
-static Dnode *AllocDnode(void) {
+static Dnode *AllocNode(void) {
     return calloc(1, sizeof(Dnode));
 }
 
-static void SetDnode(Dnode *n, const Member *x, const Dnode *prev, const Dnode *next) {
+static void SetNode(Dnode *n, const PhysCheck *x, const Dnode *prev, const Dnode *next) {
     n->data = *x;
     n->prev = (Dnode *) prev;
     n->next = (Dnode *) next;
@@ -70,16 +86,16 @@ static int IsEmpty(const Dlist *list) {
 }
 
 void Initialize(Dlist *list) {
-    Dnode *dummyNode = AllocDnode();
+    Dnode *dummyNode = AllocNode();
     list->head = list->crnt = dummyNode;
     dummyNode->prev = dummyNode->next = dummyNode;
 }
 
 void PrintCurrent(const Dlist *list) {
     if (IsEmpty(list))
-        printf("着目要素はありません。");
+        printf("The current node does not exist.");
     else
-        PrintMember(&list->crnt->data);
+        PrintPhysCheck(&list->crnt->data);
 }
 
 void PrintLnCurrent(const Dlist *list) {
@@ -87,8 +103,8 @@ void PrintLnCurrent(const Dlist *list) {
     putchar('\n');
 }
 
-Dnode *Search(Dlist *list, const Member *x,
-              int compare(const Member *x, const Member *y)) {
+Dnode *Search(Dlist *list, const PhysCheck *x,
+             int compare(const PhysCheck *x, const PhysCheck *y)) {
     Dnode *ptr = list->head->next;
 
     while (ptr != list->head) {
@@ -103,32 +119,32 @@ Dnode *Search(Dlist *list, const Member *x,
 
 void Print(const Dlist *list) {
     if (IsEmpty(list))
-        puts("ノードがありません。");
+        puts("The node does not exist.");
     else {
         Dnode *ptr = list->head->next;
 
-        puts("【一覧表】");
+        puts("---List---");
         while (ptr != list->head) {
-            PrintLnMember(&ptr->data);
+            PrintLnPhysCheck(&ptr->data);
             ptr = ptr->next;
         }
     }
 }
 
-void InsertAfter(Dlist *list, Dnode *p, const Member *x) {
-    Dnode *ptr = AllocDnode();
+void InsertAfter(Dlist *list, Dnode *p, const PhysCheck *x) {
+    Dnode *ptr = AllocNode();
     Dnode *nxt = p->next;
 
     p->next = p->next->prev = ptr;
-    SetDnode(ptr, x, p, nxt);
+    SetNode(ptr, x, p, nxt);
     list->crnt = ptr;
 }
 
-void InsertFront(Dlist *list, const Member *x) {
+void InsertFront(Dlist *list, const PhysCheck *x) {
     InsertAfter(list, list->head, x);
 }
 
-void InsertRear(Dlist *list, const Member *x) {
+void InsertRear(Dlist *list, const PhysCheck *x) {
     InsertAfter(list, list->head->prev, x);
 }
 
@@ -168,15 +184,16 @@ void Terminate(Dlist *list) {
 
 typedef enum {
     TERMINATE, INS_FRONT, INS_REAR, RMV_FRONT, RMV_REAR, PRINT_CRNT,
-    RMV_CRNT, SRCH_NO, SRCH_NAME, PRINT_ALL, CLEAR
+    RMV_CRNT, SRCH_VISION, SRCH_HEIGHT, SRCH_NAME, PRINT_ALL, CLEAR
 } Menu;
 
 Menu SelectMenu(void) {
     int i, ch;
     char *mstring[] = {
-            "先頭にノードを挿入", "末尾にノードを挿入", "先頭のノードを削除",
-            "末尾のノードを削除", "着目ノードを表示", "着目ノードを削除",
-            "番号で探索", "氏名で探索", "全ノードを表示", "全ノードを削除"
+            "Insert Front", "Insert Rear", "Remove Front",
+            "Remove Rear", "Print Current", "Remove Current",
+            "Search Vision", "Search Height", "Search Name",
+            "Print All", "Clear All"
     };
 
     do {
@@ -185,7 +202,7 @@ Menu SelectMenu(void) {
             if ((i % 3) == 2)
                 putchar('\n');
         }
-        printf("( 0) 終了 : ");
+        printf("( 0) End ：");
         scanf("%d", &ch);
     } while (ch < TERMINATE || ch > CLEAR);
 
@@ -195,21 +212,18 @@ Menu SelectMenu(void) {
 int main(void) {
     Menu menu;
     Dlist list;
+    PhysCheck x;
 
     Initialize(&list);
 
     do {
-        int n;
-        Member x;
-        Member *ptr;
-
         switch (menu = SelectMenu()) {
             case INS_FRONT:
-                x = ScanMember("先頭に挿入", MEMBER_NO | MEMBER_NAME);
+                x = ScanPhysCheck("insert front", PHYSCHECK_VISION | PHYSCHECK_HEIGHT | PHYSCHECK_NAME);
                 InsertFront(&list, &x);
                 break;
             case INS_REAR:
-                x = ScanMember("末尾に挿入", MEMBER_NO | MEMBER_NAME);
+                x = ScanPhysCheck("insert rear", PHYSCHECK_VISION | PHYSCHECK_HEIGHT | PHYSCHECK_NAME);
                 InsertRear(&list, &x);
                 break;
             case RMV_FRONT:
@@ -218,25 +232,32 @@ int main(void) {
             case RMV_REAR:
                 RemoveRear(&list);
                 break;
-            case PRINT_CRNT:
-                PrintLnCurrent(&list);
-                break;
             case RMV_CRNT:
                 RemoveCurrent(&list);
                 break;
-            case SRCH_NO:
-                x = ScanMember("探索", MEMBER_NO);
-                if (Search(&list, &x, MemberNoCmp) != NULL)
+            case PRINT_CRNT:
+                PrintLnCurrent(&list);
+                break;
+            case SRCH_VISION:
+                x = ScanPhysCheck("search", PHYSCHECK_VISION);
+                if (Search(&list, &x, PhysCheckVisionCmp) != NULL)
                     PrintLnCurrent(&list);
                 else
-                    puts("その番号のデータはありません。");
+                    puts("The vision does not exist.");
+                break;
+            case SRCH_HEIGHT:
+                x = ScanPhysCheck("search", PHYSCHECK_HEIGHT);
+                if (Search(&list, &x, PhysCheckHeightCmp) != NULL)
+                    PrintLnCurrent(&list);
+                else
+                    puts("The height does not exist.");
                 break;
             case SRCH_NAME:
-                x = ScanMember("探索", MEMBER_NAME);
-                if (Search(&list, &x, MemberNameCmp) != NULL)
+                x = ScanPhysCheck("search", PHYSCHECK_NAME);
+                if (Search(&list, &x, PhysCheckNameCmp) != NULL)
                     PrintLnCurrent(&list);
                 else
-                    puts("その名前のデータはありません。");
+                    puts("The name does not exist.");
                 break;
             case PRINT_ALL:
                 Print(&list);
@@ -244,10 +265,11 @@ int main(void) {
             case CLEAR:
                 Clear(&list);
                 break;
+            default:
+                break;
         }
     } while (menu != TERMINATE);
 
     Terminate(&list);
-
     return 0;
 }
