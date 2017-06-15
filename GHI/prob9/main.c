@@ -143,7 +143,7 @@ void Remove(Dlist *list, Dnode *p) {
 
 void RemoveFront(Dlist *list) {
     if (!IsEmpty(list))
-        Remove(list, list->head->prev);
+        Remove(list, list->head->next);
 }
 
 void RemoveRear(Dlist *list) {
