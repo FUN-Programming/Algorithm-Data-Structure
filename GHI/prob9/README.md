@@ -15,5 +15,5 @@
 2)
 (ア) ⑥dummyNode, ⑦[5,kita], ⑧[25,kita], ⑨[20,ueda], ⑩[25, takahashi], ⑪[5,konishi]
 (イ) ⑦
-(ウ) ⑧
+(ウ) ⑧
 ```
