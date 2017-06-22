@@ -24,6 +24,8 @@ Algorithm and data structure
 - [練習問題7(宿題)](./EF/homework07)
 - [授業中練習問題8](./EF/prob8)
 - [練習問題8(宿題)](./EF/prob8homework)
+- [授業中練習問題9](./EF/prob9)
+- [練習問題9(宿題)](./EF/prob9homework)
 
 ### GHI
 
