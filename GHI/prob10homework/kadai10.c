@@ -43,7 +43,7 @@ int IsEmpty(const StringsStack *s) {
 
 void recur3(char *st) {
     StringsStack stk;
-    char *temp =;
+    char *temp = st;
 
     Initialize(&stk, 100);
 
@@ -70,6 +70,9 @@ void recur3(char *st) {
 
 int main(void) {
     char x[String_Max];
+
+    printf("Please input string: ");
+    scanf("%s", x);
 
     recur3(x);
     printf("\n");
