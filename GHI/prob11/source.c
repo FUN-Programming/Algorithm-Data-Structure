@@ -43,7 +43,7 @@ void Print(const Member *data, int n) {
 
 typedef enum {
     TERMINATE, ASCEND_NO, ASCENT_NAME,
-    DESCEEND_NO, DESCEND_NAME, PRINT_ALL
+    DESCEND_NO, DESCEND_NAME, PRINT_ALL
 } Menu;
 
 Menu SelectMenu(void) {
@@ -64,17 +64,22 @@ Menu SelectMenu(void) {
         scanf("%d", &ch);
     } while (ch < TERMINATE || ch > PRINT_ALL);
 
-    return (Menu)ch;
+    return (Menu) ch;
 }
 
 int main(void) {
     Menu menu;
     Member data[] = {
-            {5, "umeda"}, {7, "satoshi"},
-            {6, "noyuri"}, {0, "daisuke"},
-            {0, "motoko"}, {4, "agemi"},
-            {9, "ito"}, {2, "ohta"},
-            {1, "takashi"}, {3, "kouji"}
+            {5, "umeda"},
+            {7, "satoshi"},
+            {6, "noyuri"},
+            {0, "daisuke"},
+            {0, "motoko"},
+            {4, "agemi"},
+            {9, "ito"},
+            {2, "ohta"},
+            {1, "takashi"},
+            {3, "kouji"}
     };
     int ndata = sizeof(data) / sizeof(data[0]);
 
@@ -88,11 +93,14 @@ int main(void) {
             case ASCENT_NAME:
                 bubble(data, ndata, MemberNameCmp, ASCENDING);
                 break;
-            case DESCEEND_NO:
+            case DESCEND_NO:
                 bubble(data, ndata, MemberNoCmp, DESCENDING);
                 break;
             case DESCEND_NAME:
                 bubble(data, ndata, MemberNameCmp, DESCENDING);
+                break;
+            case PRINT_ALL:
+                Print(data, ndata);
                 break;
         }
     } while (menu != TERMINATE);
