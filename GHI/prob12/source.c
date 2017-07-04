@@ -45,10 +45,11 @@ void quick(Member *a, int left, int right, int compare(const Member *y, const Me
     do {
         while (compare(&x, a + pl) > 0) pl++;
         while (compare(a + pr, &x) > 0) pr--;
-        if (pl <= pr) {}
-        swap(Member, a[pl], a[pr]);
-        pl++;
-        pr--;
+        if (pl <= pr) {
+            swap(Member, a[pl], a[pr]);
+            pl++;
+            pr--;
+        }
     } while (pl <= pr);
     // ------------------------------------- 1
     if (left < pr) quick(a, left, pr, compare);
