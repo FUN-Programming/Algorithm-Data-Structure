@@ -47,7 +47,7 @@ void quick(Member *a, int left, int right, int compare(const Member *y, const Me
         while (compare(a + pr, &x) > 0) pr--;
         if (pl <= pr) {}
         swap(Member, a[pl], a[pr]);
-        pl++
+        pl++;
         pr--;
     } while (pl <= pr);
     // ------------------------------------- 1
@@ -101,16 +101,16 @@ int main(void) {
     do {
         switch (menu = SelectMenu()) {
             case ASCEND_NO:
-                quick(data, 0, ndata - 1, AscendingMemberNoCmp);
+                quick(data, 0, ndata-1, AscendingMemberNoCmp);
                 break;
             case ASCEND_NAME:
-                quick(data, 0, ndata - 1, AscendingMemberNameCmp);
+                quick(data, 0, ndata-1, AscendingMemberNameCmp);
                 break;
             case DESCEND_NO:
-                quick(data, 0, ndata - 1, DescendingMemberNoCmp);
+                quick(data, 0, ndata-1, DescendingMemberNoCmp);
                 break;
             case DESCEND_NAME:
-                quick(data, 0, ndata - 1, DescendingMemberNameCmp);
+                quick(data, 0, ndata-1, DescendingMemberNameCmp);
                 break;
             case PRINT_ALL:
                 Print(data, ndata);
