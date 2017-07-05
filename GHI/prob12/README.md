@@ -1,3 +1,8 @@
+# 授業中練習問題12
+
+ソースコード：[source.c](./source.c)
+
+```
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -37,26 +42,21 @@ void Print(const Member *data, int n) {
     }
 }
 
-int counter = 0;
-int quickCounter = 0;
-
 void quick(Member *a, int left, int right, int compare(const Member *y, const Member *z)) {
     int pl = left;
     int pr = right;
     Member x = a[(pl + pr) / 2];
-    quickCounter++;
 
     do {
         while (compare(&x, a + pl) > 0) pl++;
         while (compare(a + pr, &x) > 0) pr--;
         if (pl <= pr) {
-            swap(Member, a[pl], a[pr]); counter++;
+            swap(Member, a[pl], a[pr]);
             pl++;
             pr--;
         }
     } while (pl <= pr);
     // ------------------------------------- 1
-    if (quickCounter == 1) printf("pl: %d, pr: %d, left: %d, right: %d\n", pl, pr, left, right);
     if (left < pr) quick(a, left, pr, compare);
     if (pl < right) quick(a, pl, right, compare);
 }
@@ -107,9 +107,7 @@ int main(void) {
     do {
         switch (menu = SelectMenu()) {
             case ASCEND_NO:
-                counter = quickCounter = 0;
                 quick(data, 0, ndata-1, AscendingMemberNoCmp);
-                printf("counter: %d, quick: %d\n", counter, quickCounter);
                 break;
             case ASCEND_NAME:
                 quick(data, 0, ndata-1, AscendingMemberNameCmp);
@@ -118,17 +116,44 @@ int main(void) {
                 quick(data, 0, ndata-1, DescendingMemberNoCmp);
                 break;
             case DESCEND_NAME:
-                counter = quickCounter = 0;
                 quick(data, 0, ndata-1, DescendingMemberNameCmp);
-                printf("counter: %d, quick: %d\n", counter, quickCounter);
                 break;
             case PRINT_ALL:
                 Print(data, ndata);
-                break;
-            default:
                 break;
         }
     } while (menu != TERMINATE);
 
     return 0;
 }
+```
+
+### 1) このプログラムの動作直後に数字の *1* を入力した
+
+- (ア) *quick* 関数の枢軸に選択された要素を示せ
+- (イ) *quick* 関数で `swap(Member, a[pl], a[pr])` が呼び出されるのは何回か
+- (ウ) *quick* 関数の **1** の場所における `pl` `pr` `left` `right` の値はいくらか
+- (エ) *quick* 関数はソートが終わるまで何回呼ばれるか
+
+### 2) このプログラムの動作直後に数字の *4* を入力した
+
+- (ア) *quick* 関数の枢軸に選択された要素を示せ
+- (イ) *quick* 関数で `swap(Member, a[pl], a[pr])` が呼び出されるのは何回か
+- (ウ) *quick* 関数の矢印 **1** の場所における `pl` `pr` `left` `right` の値はいくらか
+- (エ) *quick* 関数はソートが終わるまで何回呼ばれるか
+
+## 提出
+
+```
+1)
+(ア) {6, "noyuri"}
+(イ) 11
+(ウ) pl: 7, pr: 6, left: 0, right: 9
+(エ) 8
+
+2)
+(ア) {6, "noyuri"}
+(イ) 9
+(ウ) pl: 5, pr: 3, left: 0, right: 9
+(エ) 8
+```
