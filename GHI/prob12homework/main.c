@@ -40,7 +40,19 @@ void Print(const Member *data, int n) {
 void quick(Member *a, int left, int right, int compare(const Member *y, const Member *z)) {
     int pl = left;
     int pr = right;
+    int n = sizeof(a) / sizeof(a[0]);
     Member x = a[(pl + pr) / 2];
+
+    if (n >= 5) {
+        if (compare(&x, a + pl) > 0)
+            if (compare(&x, a + pr) > 0)
+                x = (compare(a + pl, a + pr) > 0) ? a[pl] : a[pr];
+        else
+            if (compare(&x, a + pl) < 0)
+                x = (compare(a + pl, a + pr) > 0) ? a[pl] : a[pr];
+    } else {
+
+    }
 
     do {
         while (compare(&x, a + pl) > 0) pl++;
