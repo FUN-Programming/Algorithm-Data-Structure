@@ -1,8 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <time.h>
 
-#define swap(type, x, y,) do {type t; t = x; x = y; y = t;} while(0)
+#define swap(type, x, y) do {type t; t = x; x = y; y = t;} while(0)
 
 typedef struct {
     int no;
@@ -36,14 +37,31 @@ void Print(const Member *data, int n) {
         PrintLnMember(data + i);
 }
 
+Member *middle3(Member *a, Member *b, Member *c, int compare(const Member *y, const Member *z)) {
+    if (compare(a, b) >= 0)
+        if (compare(b, c) >= 0) return b;
+        else if (compare(a, c) <= 0) return a;
+        else return c;
+    else if (compare(a, c) > 0) return a;
+    else if (compare(b, c) > 0) return c;
+    else return b;
+}
+
 void quick(Member *a, int left, int right, int compare(const Member *y, const Member *z)) {
     int pl = left;
     int pr = right;
+    int size = right - left + 1;
     Member x = a[(pl + pr) / 2];
+
+    if (size >= 5) {
+        x = *middle3(a + pl, &x, a + pr, compare);
+    } else {
+        x = a[pl + rand() % size];
+    }
 
     do {
         while (compare(&x, a + pl) > 0) pl++;
-        while (compare(a + pl, &x) > 0) pr--;
+        while (compare(a + pr, &x) > 0) pr--;
         if (pl <= pr) {
             swap(Member, a[pl], a[pr]);
             pl++;
