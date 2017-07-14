@@ -52,3 +52,4 @@ Algorithm and data structure
 - [授業中練習問題12](./GHI/prob12)
 - [練習問題12(宿題)](./GHI/prob12homework)
 - [授業中練習問題13](./GHI/prob13)
+- [練習問題13(宿題)](./GHI/prob13homework)
