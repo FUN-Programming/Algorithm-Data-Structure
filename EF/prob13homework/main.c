@@ -57,35 +57,38 @@ static void SetBinNode(BinNode *n, const Member *x,
     n->right = (BinNode *) right;
 }
 
-BinNode *Search(BinNode *p, const Member *x) {
+BinNode *Search(BinNode *p, const Member *x,
+                int compare(const Member *y, const Member *z)) {
     int cond;
 
     if (p == NULL)
         return NULL;
-    else if ((cond = MemberNameCmp(x, &p->data)) == 0)
+    else if ((cond = compare(x, &p->data)) == 0)
         return p;
     else if (cond < 0)
-        return Search(p->left, x);
+        return Search(p->left, x, compare);
     else
-        return Search(p->right, x);
+        return Search(p->right, x, compare);
 }
 
-BinNode *Add(BinNode *p, const Member *x) {
+BinNode *Add(BinNode *p, const Member *x,
+             int compare(const Member *y, const Member *z)) {
     int cond;
 
     if (p == NULL) {
         p = AllocBinNode();
         SetBinNode(p, x, NULL, NULL);
-    } else if ((cond = MemberNameCmp(x, &p->data)) == 0)
+    } else if ((cond = compare(x, &p->data)) == 0)
         printf("[ERROR] %s already exists.\n", x->name);
     else if (cond < 0)
-        p->left = Add(p->left, x);
+        p->left = Add(p->left, x, compare);
     else
-        p->right = Add(p->right, x);
+        p->right = Add(p->right, x, compare);
     return p;
 }
 
-int Remove(BinNode **root, const Member *x) {
+int Remove(BinNode **root, const Member *x,
+           int compare(const Member *y, const Member *z)) {
     BinNode *next, *temp;
     BinNode **left;
     BinNode **p = root;
@@ -95,7 +98,7 @@ int Remove(BinNode **root, const Member *x) {
         if (*p == NULL) {
             printf("[ERROR] %s does not exists.\n", x->name);
             return -1;
-        } else if ((cond = MemberNameCmp(x, &(*p)->data)) == 0)
+        } else if ((cond = compare(x, &(*p)->data)) == 0)
             break;
         else if (cond < 0)
             p = &((*p)->left);
@@ -158,8 +161,16 @@ Menu SelectMenu(void) {
 }
 
 int main(void) {
+    int sw;
     Menu menu;
     BinNode *root = NULL;
+
+    do {
+        printf("Please input number.\n");
+        printf("(%d) Number Tree, (%d) Name Tree : ", MEMBER_NO, MEMBER_NAME);
+        scanf("%d", &sw);
+        putchar('\n');
+    } while (sw != MEMBER_NO && sw != MEMBER_NAME);
 
     do {
         Member x;
@@ -168,20 +179,22 @@ int main(void) {
         switch (menu = SelectMenu()) {
             case ADD:
                 x = ScanMember("insert", MEMBER_NO | MEMBER_NAME);
-                root = Add(root, &x);
+                root = Add(root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp);
                 break;
             case REMOVE:
                 x = ScanMember("remove", MEMBER_NAME);
-                Remove(&root, &x);
+                Remove(&root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp);
                 break;
             case SEARCH:
                 x = ScanMember("search", MEMBER_NAME);
-                if ((temp = Search(root, &x)) != NULL)
+                if ((temp = Search(root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp)) != NULL)
                     PrintLnMember(&temp->data);
                 break;
             case PRINT_ALL:
                 puts("--- List ---");
                 PrintTree(root);
+                break;
+            default:
                 break;
         }
     } while (menu != TERMINATE);
