@@ -172,6 +172,7 @@ int main(void) {
                 break;
             case REMOVE:
                 x = ScanMember("remove", MEMBER_NAME);
+                Remove(&root, &x);
                 break;
             case SEARCH:
                 x = ScanMember("search", MEMBER_NAME);
