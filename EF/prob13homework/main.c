@@ -182,11 +182,11 @@ int main(void) {
                 root = Add(root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp);
                 break;
             case REMOVE:
-                x = ScanMember("remove", MEMBER_NAME);
+                x = ScanMember("remove", sw);
                 Remove(&root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp);
                 break;
             case SEARCH:
-                x = ScanMember("search", MEMBER_NAME);
+                x = ScanMember("search", sw);
                 if ((temp = Search(root, &x, sw == MEMBER_NO ? MemberNoCmp : MemberNameCmp)) != NULL)
                     PrintLnMember(&temp->data);
                 break;
